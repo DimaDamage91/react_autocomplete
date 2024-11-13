@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   }, [query, selectedPerson])
 
 
-  const filteredPeople = peopleFromServer.filter(person => person.name.toLowerCase().includes(debounceQuery.toLowerCase())
+  const filteredPeople = query.trim() === '' ? peopleFromServer : peopleFromServer.filter(person => person.name.toLowerCase().includes(debounceQuery.toLowerCase())
   );
 
   const handleSelectPerson = (person: Person) => {
@@ -26,11 +26,13 @@ export const App: React.FC = () => {
     setDebounceQuery('');
   };
 
+  const delay = 300;
+
   const handleQueryChange = useCallback(
     debounce((value: string) => {
       setDebounceQuery(value);
-    }, 300),
-    []
+    }, delay),
+    [delay]
   );
 
   const noSuggestions = query && filteredPeople.length === 0;
